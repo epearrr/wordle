@@ -26,6 +26,10 @@ public class Word {
         word = wordsArray[new Random().nextInt(wordsArray.length)];
     }
 
+    public String getWord() {
+        return word;
+    }
+
     /**
      * toString method returns the randomly selected word
      */
