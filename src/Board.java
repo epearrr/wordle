@@ -20,17 +20,18 @@ public class Board {
         statusLayout = new ArrayList<>();
         lettersLayout = new ArrayList<>();
 
-        CellStatus[] statuses = new CellStatus[5];
-        Arrays.fill(statuses, CellStatus.UNGUESSED);
-        List<CellStatus> statusList = Arrays.asList(statuses);
+        CellStatus[] statuses;
+        String[] strings;
 
-        String[] Strings = new String[5];
-        Arrays.fill(Strings, "_");
-        List<String> letterList = Arrays.asList(Strings);
-
+        // 
         for(int i = 0; i < 5; i++) {
-            statusLayout.add(statusList);
-            lettersLayout.add(letterList);
+            statuses = new CellStatus[5];
+            Arrays.fill(statuses, CellStatus.UNGUESSED);
+            strings = new String[5];
+            Arrays.fill(strings, "_");
+
+            statusLayout.add(Arrays.asList(statuses));
+            lettersLayout.add(Arrays.asList(strings));
         }
     }
 
