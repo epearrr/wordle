@@ -13,6 +13,10 @@ public class Board {
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_YELLOW = "\u001B[33m";
 
+    /**
+     * constructor that initializes the word, guess, statusLayout, and lettersLayout
+     * @param word the word that the user is trying to guess
+     */
     public Board(String word) {
         this.word = word;
         this.guess = "     ";
@@ -23,7 +27,7 @@ public class Board {
         CellStatus[] statuses;
         String[] strings;
 
-        // 
+        // set every value in the statusLayout to CellStatus.UNGUESSED and every value in lettersLayout to "_"
         for(int i = 0; i < 5; i++) {
             statuses = new CellStatus[5];
             Arrays.fill(statuses, CellStatus.UNGUESSED);
@@ -42,17 +46,36 @@ public class Board {
     public void makeGuess(String guess) {
         this.guess = guess;
         int layoutIndex = 0;
+        String guessedLetter;
+        String correctLetter;
+
+        HashMap<String, Integer> letterFrequencies = new LetterFrequency(lettersLayout.get(0)).getFrequencies();
+        System.out.println("LETTERFREQS: " + letterFrequencies);
 
         // find the next available row in lettersLayout
         while(statusLayout.get(layoutIndex).get(0) != CellStatus.UNGUESSED) {
             layoutIndex++;
         }
 
-        // iterates through each character in the guess and adds it to the lettersLayout
+        // iterates through each letter in the guess and adds it to the lettersLayout
         for(int i = 0; i < 5; i++) {
             lettersLayout.get(layoutIndex).set(i, guess.substring(i, i+1));
-            System.out.println("lettersLayout is " + lettersLayout);
         }
+
+        // update the statusLayout depending on whether the user was correct, incorrect, or got the letter in the wrong position
+        for(int i = 0; i < 5; i++) {
+            guessedLetter = guess.substring(i, i+1); 
+            correctLetter = word.substring(i, i+1); 
+            
+            if(guessedLetter.equals(correctLetter)) {
+                statusLayout.get(layoutIndex).set(i, CellStatus.CORRECT);
+            } else if(word.contains(guessedLetter)) {
+                statusLayout.get(layoutIndex).set(i, CellStatus.WRONG_CELL);
+            } else {
+                statusLayout.get(layoutIndex).set(i, CellStatus.INCORRECT);
+            }
+        }
+
     }
 
     /**
@@ -67,6 +90,11 @@ public class Board {
      */
     public ArrayList<List<CellStatus>> getStatusLayout() {
         return statusLayout;
+    }
+
+
+    public void printLetterFrequency() {
+        System.out.println();
     }
 
 
