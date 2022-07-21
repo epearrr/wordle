@@ -11,7 +11,7 @@ public class LetterFrequency {
         this.frequencies = new HashMap<String, Integer>();
     }
 
-    public HashMap getFrequencies() {
+    public HashMap<String, Integer> getFrequencies() {
         for(int i = 0; i < 5; i++) {
             frequencies.put(letters.get(i), Collections.frequency(letters, letters.get(i)));
         }
