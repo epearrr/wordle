@@ -66,9 +66,12 @@ public class Board {
             guessedLetter = guess.substring(i, i+1); 
             correctLetter = word.substring(i, i+1); 
             
+            HashMap<String, Integer> correctLetterFreq = getFrequencies(word);
+
             if(guessedLetter.equals(correctLetter)) {
                 statusLayout.get(layoutIndex).set(i, CellStatus.CORRECT);
-            } else if(word.contains(guessedLetter) /*&&  */) {
+            } else if(word.contains(guessedLetter) /* && 
+                    */) {
                 statusLayout.get(layoutIndex).set(i, CellStatus.WRONG_CELL);
             } else {
                 statusLayout.get(layoutIndex).set(i, CellStatus.INCORRECT);
@@ -82,7 +85,7 @@ public class Board {
      * @param letters list of letters whose frequencies are desired
      * @return hashmap containing each letter in the letters list and how many times each letter occurs
      */
-    private HashMap<String, Integer> getFrequencies(List<String> letters) {
+    public HashMap<String, Integer> getFrequencies(List<String> letters) {
         HashMap<String, Integer> frequencies = new HashMap<>();
         
         for(int i = 0; i < 5; i++) {
@@ -91,6 +94,28 @@ public class Board {
 
         return frequencies;
     }
+
+    /**
+     * overloaded getFrequencies method for when a String is given as an argument
+     */
+    public HashMap<String, Integer> getFrequencies(String word) {
+        HashMap<String, Integer> frequencies = new HashMap<>();
+        String[] lettersArr = new String[5];
+        List<String> letters;
+
+        for(int i = 0; i < 5; i++) {
+            lettersArr[i] = word.substring(i, i+1);
+        }
+
+        letters = Arrays.asList(lettersArr);
+
+        for(int i = 0; i < 5; i++) {
+            frequencies.put(letters.get(i), Collections.frequency(letters, letters.get(i)));
+        }
+
+        return frequencies;
+    }
+
 
     /**
      * @return lettersLayout
@@ -122,6 +147,6 @@ public class Board {
             }
             visualBoard += "\n"; 
         }
-        return String.format(visualBoard + "\n" + word);
+        return String.format(visualBoard);
     }
 }
