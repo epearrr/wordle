@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,8 +50,6 @@ public class Board {
         String guessedLetter;
         String correctLetter;
 
-        HashMap<String, Integer> letterFrequencies = new LetterFrequency(lettersLayout.get(0)).getFrequencies();
-        System.out.println("LETTERFREQS: " + letterFrequencies);
 
         // find the next available row in lettersLayout
         while(statusLayout.get(layoutIndex).get(0) != CellStatus.UNGUESSED) {
@@ -69,13 +68,28 @@ public class Board {
             
             if(guessedLetter.equals(correctLetter)) {
                 statusLayout.get(layoutIndex).set(i, CellStatus.CORRECT);
-            } else if(word.contains(guessedLetter)) {
+            } else if(word.contains(guessedLetter) /*&&  */) {
                 statusLayout.get(layoutIndex).set(i, CellStatus.WRONG_CELL);
             } else {
                 statusLayout.get(layoutIndex).set(i, CellStatus.INCORRECT);
             }
         }
 
+    }
+
+    /**
+     * 
+     * @param letters list of letters whose frequencies are desired
+     * @return hashmap containing each letter in the letters list and how many times each letter occurs
+     */
+    private HashMap<String, Integer> getFrequencies(List<String> letters) {
+        HashMap<String, Integer> frequencies = new HashMap<>();
+        
+        for(int i = 0; i < 5; i++) {
+            frequencies.put(letters.get(i), Collections.frequency(letters, letters.get(i)));
+        }
+
+        return frequencies;
     }
 
     /**
@@ -91,12 +105,6 @@ public class Board {
     public ArrayList<List<CellStatus>> getStatusLayout() {
         return statusLayout;
     }
-
-
-    public void printLetterFrequency() {
-        System.out.println();
-    }
-
 
     /**
      * @return a visual representation of the Wordle board
