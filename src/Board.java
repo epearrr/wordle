@@ -70,14 +70,42 @@ public class Board {
 
             if(guessedLetter.equals(correctLetter)) {
                 statusLayout.get(layoutIndex).set(i, CellStatus.CORRECT);
-            } else if(word.contains(guessedLetter) /* && 
-                    */) {
+            } else if(word.contains(guessedLetter) && verifyStatus(guessedLetter, correctLetter, i)) {
                 statusLayout.get(layoutIndex).set(i, CellStatus.WRONG_CELL);
             } else {
                 statusLayout.get(layoutIndex).set(i, CellStatus.INCORRECT);
             }
         }
+    }
 
+    /**
+     * If the correct word was "STEAL" and your guess was "STEEL", for example, the second E in STEEL would be
+     * have a CellStatus of WRONG_CELL instead of INCORRECT. This method helps fix that logic
+     * @param guessedLetter
+     * @param correctLetter
+     * @param i
+     * @return
+     */
+    private boolean verifyStatus(String guessedLetter, String correctLetter, int i) {
+        return getFrequencies(guess.substring(0, i+1)).get(guessedLetter) <= countOccurances(word, guessedLetter);
+    }
+
+    /**
+     * method that returns the number of times a particular character occurs in a string
+     * @param word the string to be searched through
+     * @param letter the character to be searched for
+     * @return number of occurances
+     */
+    private int countOccurances(String word, String letter) {
+        int count = 0;
+        char ch = letter.charAt(0);
+        
+        for(int i = 0; i < word.length(); i++) {
+            if(word.charAt(i) == ch) {
+                count++;
+            }
+        }
+        return count;
     }
 
     /**
@@ -103,12 +131,17 @@ public class Board {
         String[] lettersArr = new String[5];
         List<String> letters;
 
+        // add individual letters to array
         for(int i = 0; i < 5; i++) {
             lettersArr[i] = word.substring(i, i+1);
         }
 
+        System.out.println("LETTERSARR: " + Arrays.toString(lettersArr));
+
+        // initialize letters list using array
         letters = Arrays.asList(lettersArr);
 
+        // add values to hashmap
         for(int i = 0; i < 5; i++) {
             frequencies.put(letters.get(i), Collections.frequency(letters, letters.get(i)));
         }
